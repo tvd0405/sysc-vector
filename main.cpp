@@ -6,7 +6,7 @@
  */
 #include <systemc>
 #include "top.h"
-#include <cstring>
+#include <string>
 
 int sc_main(int, char*[])
 {
@@ -14,12 +14,11 @@ int sc_main(int, char*[])
    sc_trace_file* tfile = sc_create_vcd_trace_file("trace");
    sc_trace(tfile, m_top.clk, "clk");
    sc_trace(tfile, m_top.rst_n, "rst_n");
-   sc_trace(tfile, m_top.input[0], "input0");
-   sc_trace(tfile, m_top.output[0], "output0");
-#if PSIZE == 2
-   sc_trace(tfile, m_top.input[1], "input1");
-   sc_trace(tfile, m_top.output[1], "output1");
-#endif
+   for (int i=0; i<PSIZE; i++)
+   {
+	   sc_trace(tfile, m_top.input[i], "input" + std::to_string(i));
+	   sc_trace(tfile, m_top.output[i], "output" + std::to_string(i));
+   }
    sc_start();
    sc_close_vcd_trace_file(tfile);
    return(0);
